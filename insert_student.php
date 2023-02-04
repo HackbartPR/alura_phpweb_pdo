@@ -14,5 +14,5 @@ $student = new Student(null, 'Carlos Guilherme', new \DateTimeImmutable('1996-12
 //Inserindo Aluno
 $query = "INSERT INTO students (name, birth_date) VALUES ('{$student->name()}', '{$student->birthDate()->format('Y-m-d')}');";
 if ($pdo->exec($query)) {
-    echo "Aluno cadastrado com sucesso!";
+    echo "Aluno cadastrado com sucesso!"; 
 }
