@@ -2,11 +2,11 @@
 
 require_once __DIR__ . "/vendor/autoload.php";
 
-use Hackbartpr\Model\Student;
+/* use Hackbartpr\Entity\Student;
+use Hackbartpr\Config\DB\ConnectionCreator;
 
 //Conexão com o banco de dados
-$dbPath = __DIR__ . '/db.sqlite';
-$pdo = new PDO("sqlite:{$dbPath}");
+$pdo = ConnectionCreator::createConnection();
 
 //Criando lista de Students a serem salvos
 $newStudentList = [
@@ -29,7 +29,7 @@ foreach ($newStudentList as $newStudent) {
     }
 }
 
-echo "Cadastros finalizados!";
+echo "Cadastros finalizados!"; */
 
 
 

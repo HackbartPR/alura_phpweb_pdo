@@ -2,17 +2,17 @@
 
 require_once __DIR__ . "/vendor/autoload.php";
 
-use Hackbartpr\Model\Student;
+use Hackbartpr\Entity\Student;
+use Hackbartpr\Infrastructure\Repository\PdoStudentRepository;
 
-//Conexão com o banco de dados
-$dbPath = __DIR__ . '/db.sqlite';
-$pdo = new PDO("sqlite:{$dbPath}");
+//Criando lista de Students a serem salvos
+/* $newStudentList = [
+    new Student(null, 'Carlos Guilherme Hackbart', new \DateTimeImmutable('1996-12-18')),
+    new Student(null, 'Lais Joaquim da Silva', new \DateTimeImmutable('1998-12-15')),
+    new Student(null, 'Matheus Hackbart', new \DateTimeImmutable('2003-10-03'))
+]; */
 
-//Criando o Aluno
-$student = new Student(null, 'Carlos Guilherme', new \DateTimeImmutable('1996-12-18'));
+$repository = new PdoStudentRepository;
+$isSaved = $repository->save(new Student(null, 'Carlos Guilherme Hackbart', new \DateTimeImmutable('1996-12-18')));
 
-//Inserindo Aluno
-$query = "INSERT INTO students (name, birth_date) VALUES ('{$student->name()}', '{$student->birthDate()->format('Y-m-d')}');";
-if ($pdo->exec($query)) {
-    echo "Aluno cadastrado com sucesso!"; 
-}
+var_dump($isSaved);

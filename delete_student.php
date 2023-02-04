@@ -2,11 +2,10 @@
 
 require_once __DIR__ . "/vendor/autoload.php";
 
-use Hackbartpr\Model\Student;
+/* use Hackbartpr\Config\DB\ConnectionCreator;
 
 //Conexão com o banco de dados
-$dbPath = __DIR__ . '/db.sqlite';
-$pdo = new PDO("sqlite:{$dbPath}");
+$pdo = ConnectionCreator::createConnection();
 
 //Id
 $id = 3;
@@ -19,4 +18,4 @@ $statement = $pdo->prepare($query);
 $statement->bindValue(':id', $id, PDO::PARAM_INT);
 if ($statement->execute()) {
     echo 'Usuário deletado com sucesso!';
-}
+} */
