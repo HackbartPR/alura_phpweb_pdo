@@ -1,0 +1,19 @@
+{
+    "name": "hackbartpr/pdo_alura",
+    "description": "Aplicação utilizada no curso PDO da Alura",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "HackbartPR",
+            "email": "cgharckbart@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Hackbartpr\\": "src/"
+        }
+    }
+}
