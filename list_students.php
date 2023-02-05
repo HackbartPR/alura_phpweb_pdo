@@ -2,11 +2,12 @@
 
 require_once __DIR__ . "/vendor/autoload.php";
 
-/* use Hackbartpr\Entity\Student;
+use Hackbartpr\Entity\Student;
 use Hackbartpr\Config\DB\ConnectionCreator;
 
 //Conexão com o banco de dados
-$pdo = ConnectionCreator::createConnection();
+$dbPath = __DIR__ . '/db.sqlite';
+$pdo = new PDO("sqlite:{$dbPath}");
 
 //Listando os alunos do banco de dados
 $statement = $pdo->query('SELECT * FROM students;');
@@ -18,7 +19,7 @@ foreach ($studentDataList as $studentData) {
     $studentList[] = new Student($studentData['id'], $studentData['name'], new \DateTimeImmutable($studentData['birth_date']));
 }
 
-var_dump($studentList); */
+var_dump($studentList);
 
 
 

@@ -26,7 +26,7 @@ class PdoStudentRepository implements StudentRepository
     /**
      * @return array
      */
-    public function allStudents(): array
+    public function allStudents (): array
     {
         $statement = $this->connection->query('SELECT * FROM students');
         
@@ -38,7 +38,7 @@ class PdoStudentRepository implements StudentRepository
      * 
      * @return array
      */
-    public function studentsBirthAt(\DateTimeImmutable $birthDate): array
+    public function studentsBirthAt (\DateTimeImmutable $birthDate): array
     {
         $statement = $this->connection->prepare("SELECT * FROM students WHERE birth_date = :birth_date");
         $statement->bindValue(":birth_date", $birthDate->format('Y-m-d'));
@@ -52,7 +52,7 @@ class PdoStudentRepository implements StudentRepository
      * 
      * @return bool
      */
-    public function save(Student $student): bool
+    public function save (Student $student): bool
     {
         if (!empty($student->id())) {
             return $this->update($student);
@@ -97,7 +97,7 @@ class PdoStudentRepository implements StudentRepository
      * 
      * @return bool
      */
-    public function remove(Student $student): bool
+    public function remove (Student $student): bool
     {
         $query = 'DELETE FROM students WHERE id = :id';
 
@@ -112,10 +112,10 @@ class PdoStudentRepository implements StudentRepository
      * 
      * @return array
      */
-    public function hydrateStudentList(PDOStatement $statement): array
+    public function hydrateStudentList (PDOStatement $statement): array
     {
         $studentList = [];
-        $studentDataList = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $studentDataList = $statement->fetchAll();
 
         foreach ($studentDataList as $student) {
             $studentList[] = new Student($student['id'], $student['name'], new \DateTimeImmutable($student['birth_date']));

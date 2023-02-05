@@ -2,11 +2,29 @@
 
 namespace Hackbartpr\Entity;
 
+use Hackbartpr\Entity\Phone;
+
 class Student
 {
+    /**
+     * @var int|null
+     */
     private ?int $_id;
+
+    /**
+     * @var string
+     */
     private string $_name;
+    
+    /**
+     * @var \DateTimeInterface
+     */
     private \DateTimeInterface $_birthDate;
+    
+    /**
+     * @var Phone[]
+     */
+    private array $_phones;
 
     /**
      * @param int|null $id
@@ -18,6 +36,7 @@ class Student
         $this->_id = $id;
         $this->_name = $name;
         $this->_birthDate = $birthDate;
+        $this->_phones = [];
     }
 
     /**
@@ -51,4 +70,23 @@ class Student
     {
         return $this->birthDate()->diff(new \DateTimeImmutable())->y;
     }
+
+    /**
+     * @param Phone $phone
+     * 
+     * @return void
+     */
+    public function addPhone(Phone $phone): void
+    {
+        $this->_phones[] = $phone;
+    }
+
+    /**
+     * @return Phone[]
+     */
+    public function phones(): array
+    {
+        return $this->_phones;
+    }
+
 }
