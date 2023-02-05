@@ -3,10 +3,9 @@
 namespace Hackbartpr\Infrastructure\Repository;
 
 use PDO;
+use PDOStatement;
 use Hackbartpr\Entity\Student;
-use Hackbartpr\Infrastructure\DB\Connection\SqliteConnectionCreator;
 use Hackbartpr\Repository\StudentRepository;
-
 
 class PdoStudentRepository implements StudentRepository
 {
@@ -17,10 +16,11 @@ class PdoStudentRepository implements StudentRepository
     private PDO $connection;
 
     /**
+     * @param PDO $connection
      */
-    public function __construct()
+    public function __construct(PDO $connection)
     {
-        $this->connection = SqliteConnectionCreator::createConnection();
+        $this->connection = $connection;
     }
 
     /**
@@ -29,14 +29,8 @@ class PdoStudentRepository implements StudentRepository
     public function allStudents(): array
     {
         $statement = $this->connection->query('SELECT * FROM students');
-        $studentDataList = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        $studentList = [];
-        foreach ($studentDataList as $student) {
-            $studentList[] = new Student($student['id'], $student['name'], new \DateTimeImmutable($student['birth_date']));
-        }
-
-        return $studentList;
+        
+        return $this->hydrateStudentList($statement);
     }
     
     /**
@@ -46,7 +40,11 @@ class PdoStudentRepository implements StudentRepository
      */
     public function studentsBirthAt(\DateTimeImmutable $birthDate): array
     {
-        return [];
+        $statement = $this->connection->prepare("SELECT * FROM students WHERE birth_date = :birth_date");
+        $statement->bindValue(":birth_date", $birthDate->format('Y-m-d'));
+        $statement->execute();
+
+        return $this->hydrateStudentList($statement);
     }
     
     /**
@@ -56,12 +54,41 @@ class PdoStudentRepository implements StudentRepository
      */
     public function save(Student $student): bool
     {
+        if (!empty($student->id())) {
+            return $this->update($student);
+        }
+
+        return $this->insert($student);
+    }
+
+    /**
+     * @param Student $student
+     * 
+     * @return bool
+     */
+    public function insert (Student $student): bool
+    {
         $query = 'INSERT INTO students (name, birth_date) VALUES (:name, :birthDate)';
 
         $statement = $this->connection->prepare($query);
         $statement->bindValue(':name', $student->name());
         $statement->bindValue(':birthDate', $student->birthDate()->format('Y-m-d'));
         
+        return $statement->execute();
+    }
+
+    /**
+     * @param Student $student
+     * 
+     * @return bool
+     */
+    public function update (Student $student): bool
+    {
+        $query = "UPDATE students SET name = :name, birth_date = :birth_date WHERE id = :id";
+        $statement = $this->connection->prepare($query);
+        $statement->bindValue(':id', $student->id(), PDO::PARAM_INT);
+        $statement->bindValue(':name', $student->name());
+        $statement->bindValue(':birth_date', $student->birthDate()->format('Y-m-d'));
         return $statement->execute();
     }
     
@@ -78,5 +105,22 @@ class PdoStudentRepository implements StudentRepository
         $statement->bindValue(':id', $student->id(), PDO::PARAM_INT);
         
         return $statement->execute();
+    }
+
+    /**
+     * @param PDOStatement $statement
+     * 
+     * @return array
+     */
+    public function hydrateStudentList(PDOStatement $statement): array
+    {
+        $studentList = [];
+        $studentDataList = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($studentDataList as $student) {
+            $studentList[] = new Student($student['id'], $student['name'], new \DateTimeImmutable($student['birth_date']));
+        }
+
+        return $studentList;
     }
 }

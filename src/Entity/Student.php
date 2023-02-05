@@ -4,9 +4,9 @@ namespace Hackbartpr\Entity;
 
 class Student
 {
-    private ?int $id;
-    private string $name;
-    private \DateTimeInterface $birthDate;
+    private ?int $_id;
+    private string $_name;
+    private \DateTimeInterface $_birthDate;
 
     /**
      * @param int|null $id
@@ -15,9 +15,9 @@ class Student
      */
     public function __construct(?int $id, string $name, \DateTimeInterface $birthDate)
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->birthDate = $birthDate;
+        $this->_id = $id;
+        $this->_name = $name;
+        $this->_birthDate = $birthDate;
     }
 
     /**
@@ -25,7 +25,7 @@ class Student
      */
     public function id(): ?int
     {
-        return $this->id;
+        return $this->_id;
     }
 
     /**
@@ -33,7 +33,7 @@ class Student
      */
     public function name(): string
     {
-        return $this->name;
+        return $this->_name;
     }
 
     /**
@@ -41,7 +41,7 @@ class Student
      */
     public function birthDate(): \DateTimeInterface
     {
-        return $this->birthDate;
+        return $this->_birthDate;
     }
 
     /**

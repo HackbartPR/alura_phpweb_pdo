@@ -10,10 +10,17 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {},
     "autoload": {
         "psr-4": {
             "Hackbartpr\\": "src/"
         }
+    },
+    "scripts": {
+        "phpcs": "phpcs src/",
+        "phan" : "phan --allow-polyfill-parser"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.7",
+        "phan/phan": "^5.4"
     }
 }

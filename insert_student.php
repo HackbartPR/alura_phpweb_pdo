@@ -3,6 +3,7 @@
 require_once __DIR__ . "/vendor/autoload.php";
 
 use Hackbartpr\Entity\Student;
+use Hackbartpr\Infrastructure\DB\Connection\SqliteConnectionCreator;
 use Hackbartpr\Infrastructure\Repository\PdoStudentRepository;
 
 //Criando lista de Students a serem salvos
@@ -12,7 +13,8 @@ use Hackbartpr\Infrastructure\Repository\PdoStudentRepository;
     new Student(null, 'Matheus Hackbart', new \DateTimeImmutable('2003-10-03'))
 ]; */
 
-$repository = new PdoStudentRepository;
+$connection = SqliteConnectionCreator::createConnection();
+$repository = new PdoStudentRepository($connection);
 $isSaved = $repository->save(new Student(null, 'Carlos Guilherme Hackbart', new \DateTimeImmutable('1996-12-18')));
 
 var_dump($isSaved);
