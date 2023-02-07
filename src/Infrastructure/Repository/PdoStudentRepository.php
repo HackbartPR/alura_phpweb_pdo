@@ -4,6 +4,7 @@ namespace Hackbartpr\Infrastructure\Repository;
 
 use PDO;
 use PDOStatement;
+use Hackbartpr\Entity\Phone;
 use Hackbartpr\Entity\Student;
 use Hackbartpr\Repository\StudentRepository;
 
@@ -28,6 +29,7 @@ class PdoStudentRepository implements StudentRepository
      */
     public function allStudents (): array
     {
+        
         $statement = $this->connection->query('SELECT * FROM students');
         
         return $this->hydrateStudentList($statement);
@@ -117,10 +119,44 @@ class PdoStudentRepository implements StudentRepository
         $studentList = [];
         $studentDataList = $statement->fetchAll();
 
+        $studentsId = array_column($studentDataList, 'id');
+        $sqlIds = implode(',', $studentsId);
+        $phoneList = $this->phonesOf($sqlIds);
+        unset($studentsId);
+
         foreach ($studentDataList as $student) {
-            $studentList[] = new Student($student['id'], $student['name'], new \DateTimeImmutable($student['birth_date']));
+            $studentList[] = $student = new Student($student['id'], $student['name'], new \DateTimeImmutable($student['birth_date']));
+            $this->matchStudentsWithPhones($student, $phoneList);
         }
 
         return $studentList;
+    }
+
+    /**
+     * @param array $studentsIs
+     * 
+     * @return array $phones
+     */
+    private function phonesOf (string $studentsId): array
+    {
+        $query = "SELECT * FROM phones WHERE student_id IN ({$studentsId});";
+        $statement = $this->connection->query($query);
+
+        return $statement->fetchAll();
+    }
+
+    /**
+     * @param Student $students
+     * @param array $phones
+     * 
+     * @return void
+     */
+    private function matchStudentsWithPhones (Student $student, array $phones): void
+    {
+        foreach ($phones as $phone) {
+            if ($phone['student_id'] === $student->id()) {
+                $student->addPhone(new Phone($phone['id'], $phone['area_code'], $phone['number']));
+            }
+        }
     }
 }
